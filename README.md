@@ -93,9 +93,10 @@ All the services will be in the Services directory.
 
 ## How to Onboard new service
 
-- Step 1
+- Step:
 
-Go inside the ```Services``` directory , there you can see all thge existing services just you have to copy any of them and make changes as per your requirement .
+### Go inside the ```Services``` directory , there you can see all thge existing services just you have to copy any of them and make changes as per your requirement .
+    
     For Example Let say onboard new service of nginx-2
 
      - copy existing nginx service and paste in the same directory , now change the name of the copied folder to nginx-1
@@ -103,6 +104,7 @@ Go inside the ```Services``` directory , there you can see all thge existing ser
      ```cd service```
      
      - now after changing name go inside the directory and inside ```config.yaml``` just you have to replate workspace attributes accordingly:    
+       
         ```yaml
         workspace:    
         yarra-non-baseline:
@@ -119,7 +121,7 @@ Go inside the ```Services``` directory , there you can see all thge existing ser
             container_name: demo
             container_port: 80
             subnet_ids: ["subnet-0dd96741b19ec4c20", "subnet-0882d12e9929ce102"]
-    ```
+        ```
 
 
     - Set the `WORPSPACE` variable (WORPSPACE = ENVIRONMENT)
@@ -156,21 +158,6 @@ Go inside the ```Services``` directory , there you can see all thge existing ser
 
 
 
-We have 2 folder in this dir
-1---- Platformn
-2---- Services
-
-Patform have all resoures which we required for our services (Alb , ECS Cluster , RDS etc )
-All the services will be the Services directory.
-How to Onboard new service
-- Step 1
-Go inside the Services directory , there you can see all thge existing services just you have to copy any of them and make changes as per your requirement .
-    For Example Let say onboard new service of nginx-2
-    - steps to follow 
-     - copy existing nginx service and paste in the same directory , now change the name of the copied folder to nginx-1
-     - now after changing name go inside the directory and inside config.yaml just you have to replate workspace attributes accordingly
-     structture
-change the config.yaml acc
 
 
 
