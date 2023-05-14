@@ -142,11 +142,11 @@ All the services will be in the Services directory.
     
   ##  For Example Let say onboard new service of nginx-2
 
-     - copy existing nginx service and paste in the same directory , now change the name of the copied folder to nginx-1
+- copy existing nginx service and paste in the same directory , now change the name of the copied folder to nginx-1
 
      ```cd service```
      
-     - now after changing name go inside the directory and inside ```config.yaml``` just you have to replate workspace attributes accordingly:    
+- now after changing name go inside the directory and inside ```config.yaml``` just you have to replate workspace attributes accordingly:    
        
         ```yaml
         workspaces:
