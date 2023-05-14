@@ -2,16 +2,59 @@
 
 This will create multiple AWS resources. Here is the `directory` structure:
 
-- Services
-    1. nginx
-    2. httpd
+```
+├── README.md
+├── services
+│   ├── httpd
+│   └── nginx
+└── platform
+    ├── cluster
+    ├── rds
+    └── alb
+```
+3 level directory structure
 
-- platform
-    1. cluster
-    2. alb
-    3. rds
-    4. iam
-    5. lambda
+```
+.
+├── README.md
+├── service
+│   ├── httpd
+│   │   ├── Makefile
+│   │   ├── README.md
+│   │   ├── _settings.tf
+│   │   ├── config.yaml
+│   │   └── main.tf
+│   └── nginx
+│       ├── Makefile
+│       ├── README.md
+│       ├── _settings.tf
+│       ├── config.yaml
+│       └── main.tf
+└── platform
+    ├── cluster
+    │   ├── Makefile
+    │   ├── README.md
+    │   ├── _data.tf
+    │   ├── _settings.tf
+    │   ├── conf.tfbackend
+    │   ├── config.yaml
+    │   └── main.tf
+    ├── rds
+    │   ├── Makefile
+    │   ├── README.md
+    │   ├── _settings.tf
+    │   ├── conf.tfbackend
+    │   ├── config.yaml
+    │   └── main.tf
+    └── alb
+        ├── Makefile
+        ├── README.md
+        ├── _data.tf
+        ├── _settings.tf
+        ├── config.yaml
+        ├── main.tf
+        └── output.tf
+```
 
 Platform have all resoures which we required for our services 
 
@@ -106,21 +149,25 @@ All the services will be in the Services directory.
      - now after changing name go inside the directory and inside ```config.yaml``` just you have to replate workspace attributes accordingly:    
        
         ```yaml
-        workspace:    
-        yarra-non-baseline:
-          aws:         
-          container_definitions:
-            cluster_arn: "arn:aws:ecs:us-east-1:476498784073:cluster/ecs-ec2"
-            target_group_arn: "arn:aws:elasticloadbalancing:us-east-1:476498784073:targetgroup/demo-ecs-sample/69f3b4a28e134d99"
-            image: "nginx:latest"
-            name: "testl"
-            containerPort: 80
-            protocol: "tcp"
-      
-          load_balancer:
-            container_name: demo
-            container_port: 80
-            subnet_ids: ["subnet-0dd96741b19ec4c20", "subnet-0882d12e9929ce102"]
+        workspaces:
+            
+            # Environment/Workspace names
+            nile-non-baseline:
+              aws:
+                account: tab-test
+              service:
+                app-name: httpd
+                zone-name: .internal.net
+                container-port: 8090
+                shared-alb: true #false or omitting this property will create service's own private load balancer
+
+            nile-baseline:
+              aws:
+                account: baseline-test
+              service:
+                app-name: httpd
+                zone-name: .internal.net
+                container-port: 8080
         ```
 
 
