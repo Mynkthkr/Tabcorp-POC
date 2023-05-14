@@ -148,7 +148,7 @@ All the services will be in the Services directory.
      
 - now after changing name go inside the directory and inside ```config.yaml``` just you have to replate workspace attributes accordingly:    
        
-        ```yaml
+    ```yaml
         workspaces:
             
             # Environment/Workspace names
@@ -168,7 +168,7 @@ All the services will be in the Services directory.
                 app-name: httpd
                 zone-name: .internal.net
                 container-port: 8080
-        ```
+     ```
 
 
     - Set the `WORPSPACE` variable (WORPSPACE = ENVIRONMENT)
