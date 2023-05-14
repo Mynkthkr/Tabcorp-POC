@@ -153,21 +153,17 @@ All the services will be in the Services directory.
             
             # Environment/Workspace names
             nile-non-baseline:
-              aws:
-                account: tab-test
-              service:
-                app-name: httpd
-                zone-name: .internal.net
-                container-port: 8090
-                shared-alb: true #false or omitting this property will create service's own private load balancer
-
-            nile-baseline:
-              aws:
-                account: baseline-test
-              service:
-                app-name: httpd
-                zone-name: .internal.net
-                container-port: 8080
+            container_definitions:
+              conatiner_name: "demo"
+              cluster_arn: "arn:aws:ecs:us-east-1:476498784073:cluster/ecs-ec2"
+              target_group_arn: "arn:aws:elasticloadbalancing:us-east-1:476498784073:targetgroup/demo-ecs-sample/69f3b4a28e134d99"
+              image: "nginx:latest"
+              containerPort: 80
+              protocol: "tcp"
+        
+            load_balancer:
+              container_port: 80
+              subnet_ids: ["subnet-0dd96741b19ec4c20", "subnet-0882d12e9929ce102"]
      ```
 
 
