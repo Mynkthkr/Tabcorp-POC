@@ -154,7 +154,6 @@ All the services will be in the Services directory.
             # Environment/Workspace names
             nile-non-baseline:
             container_definitions:
-              conatiner_name: "demo"
               cluster_arn: "arn:aws:ecs:us-east-1:476498784073:cluster/ecs-ec2"
               target_group_arn: "arn:aws:elasticloadbalancing:us-east-1:476498784073:targetgroup/demo-ecs-sample/69f3b4a28e134d99"
               image: "nginx:latest"
