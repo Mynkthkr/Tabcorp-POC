@@ -5,7 +5,7 @@ module "db" {
 
   engine            = "mysql"
   engine_version    = "5.7"
-  instance_class    = "db.m5.xlarge"
+  instance_class    = "db.t3.medium"
   allocated_storage = 5
 
   db_name  = local.workspace["rds"]["db_name"]
@@ -15,7 +15,7 @@ module "db" {
 
   iam_database_authentication_enabled = true
 
-  vpc_security_group_ids = ["sg-0065ec72bb70f24bf"]
+  vpc_security_group_ids = ["sg-04bd3933dce1e8627"]
 
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
@@ -33,7 +33,7 @@ module "db" {
 
   # DB subnet group
   create_db_subnet_group = true
-  subnet_ids             = ["subnet-0dd96741b19ec4c20", "subnet-0882d12e9929ce102"]
+  subnet_ids             = ["subnet-04edb69101d571cf4", "subnet-097aa469a5f1dd4ba"]
 
   # DB parameter group
   family = local.workspace.rds.family
@@ -54,22 +54,22 @@ module "db" {
     }
   ]
 
-  options = [
-    {
-      option_name = "MARIADB_AUDIT_PLUGIN"
+  # options = [
+  #   {
+  #     option_name = "MARIADB_AUDIT_PLUGIN"
 
-      option_settings = [
-        {
-          name  = "SERVER_AUDIT_EVENTS"
-          value = "CONNECT"
-        },
-        {
-          name  = "SERVER_AUDIT_FILE_ROTATIONS"
-          value = "37"
-        },
-      ]
-    },
-  ]
+  #     option_settings = [
+  #       {
+  #         name  = "SERVER_AUDIT_EVENTS"
+  #         value = "CONNECT"
+  #       },
+  #       {
+  #         name  = "SERVER_AUDIT_FILE_ROTATIONS"
+  #         value = "37"
+  #       },
+  #     ]
+  #   },
+  # ]
 }
 
 

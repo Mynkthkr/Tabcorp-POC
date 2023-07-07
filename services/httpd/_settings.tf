@@ -1,8 +1,5 @@
-provider "aws" {
-  region     = "us-east-1"
-  access_key = "AEN"
-  secret_key = "rrs2npG"
-}
+
+
 
 
 locals {
@@ -14,8 +11,9 @@ locals {
   project_name_prefix = "${local.workspace.environment_name}"
 
   tags = {
-    Project     = local.workspace.environment_name
+    Project = "${local.workspace.project_name}-${local.workspace.environment_name}"
     Environment = local.workspace.environment_name
+    Terraform   = "true"
   }
 }
 

@@ -1,11 +1,11 @@
 workspace:
-   yarra-non-baseline:
+   aws-infra-us-east-1-qa:
     aws:   
       region: "us-east-1"
       account_id: 
     account_name: aws-infra
     environment_name: "qa"
-
+    project_name : "ecs-infra"
  
     autoscaling_capacity_providers:
       name: "asgtest"
@@ -16,8 +16,11 @@ workspace:
     #   name: "demo"
 
     autoscaling:
-      instance_type: "t3.large"
+      instance_type: "t2.micro"
       image_id:  "ami-0e1ce54e679f83a66"
+
+    extra:
+      subnet_ids: ["subnet-01dcaf8e531b9fd7e", "subnet-075d159e662923fd8"]
 
       
 

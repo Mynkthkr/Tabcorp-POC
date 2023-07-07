@@ -2,9 +2,9 @@ data "aws_availability_zones" "available" {}
 
 locals {
   region = "us-east-1"
-  name   = demo
+  name   = "demo"
 
-  container_name = ngnix
+  container_name = "ngnix"
   container_port = 80
 
 
@@ -26,9 +26,9 @@ module "alb_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${local.name}-service"
+  name        = "${local.workspace.project_name}-${local.workspace.environment_name}-alb_sg"     #"${local.name}-service"
   description = "Service security group"
-  vpc_id      = "vpc-013ec814de774ca97" #module.vpc.vpc_id
+  vpc_id      = "vpc-09b0d790fb82b19fa" #module.vpc.vpc_id
 
   ingress_rules       = ["http-80-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
@@ -43,21 +43,51 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 8.0"
 
-  name = local.name
+  name = "${local.workspace.project_name}-${local.workspace.environment_name}-alb"
 
   load_balancer_type = "application"
 
-  vpc_id          = "vpc-013ec814de774ca97" #module.vpc.vpc_id
-  subnets         = ["subnet-0dd96741b19ec4c20", "subnet-0882d12e9929ce102"] #module.vpc.public_subnets
-  security_groups = ["sg-0065ec72bb70f24bf"]
+  vpc_id          = "vpc-09b0d790fb82b19fa" #module.vpc.vpc_id
+  subnets         = local.workspace.extra.subnet_ids     #["subnet-01dcaf8e531b9fd7e", "subnet-075d159e662923fd8"] #module.vpc.public_subnets
+  security_groups = ["${module.alb_sg.security_group_id}"]
+
+  
+#   https_listeners = [
+#     {
+#       port               = 443
+#       listener_ssl_policy_default = "ELBSecurityPolicy-2016-08"
+#       protocol           = "HTTPS"
+# #      certificate_arn    = "arnawsiam:123456789012server-certificate/test_cert-123456789012"
+#       target_group_index = 0
+#     }
+#   ]
 
   http_tcp_listeners = [
     {
-      port               = local.container_port
+      port               = 80
       protocol           = "HTTP"
       target_group_index = 0
+      # tags = {
+      #   Listener = "ECS-Infra-http-listener"  
+      # }
     },
   ]
+
+  # http_tcp_listeners = [
+  #   {
+  #     port        = 80
+  #     protocol    = "HTTP"
+  #     action_type = "redirect"
+  #     redirect = {
+  #       port        = "443"
+  #       protocol    = "HTTPS"
+  #       status_code = "HTTP_301"
+  #     }
+  #     # tags = {
+  #     #   Listener = "${local.workspace.project_name}-${local.workspace.environment_name}-http-listener" 
+  #     # }
+  #   }
+  # ]
 
   target_groups = [
     {
@@ -66,13 +96,18 @@ module "alb" {
       backend_port     = local.container_port
       target_type      = "instance"
       tags = {
-        Project = "TTN-Infra" 
+        Project = "ECS-Infra" 
       }
     },
   ]
+  
+  tags = local.tags
 
-  # tags = {
-  #   Project = "TTN-Infra" 
+  http_tcp_listeners_tags = {
+    Listener = "${local.workspace.project_name}-${local.workspace.environment_name}-http-listener" 
+  }
+  # https_tcp_listeners_tags = {
+  #   Listener = "${local.workspace.project_name}-${local.workspace.environment_name}-https-listener"
   # }
 }
 

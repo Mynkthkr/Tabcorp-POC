@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = "AEN"
-  secret_key = "rrsnpG"
+#  access_key = "AEN"
+#  secret_key = "rrsnpG"
 }
 
 

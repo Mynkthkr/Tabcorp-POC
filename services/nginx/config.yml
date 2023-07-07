@@ -1,27 +1,60 @@
 workspace:
-  yarra-non-baseline:
+  aws-infra-us-east-1-qa:
     aws:   
       region: "us-east-1"
       account_id: 
     account_name: aws-infra
     environment_name: "qa"
+    project_name : "ecs-infra"
 
     ecs_service:
-      name: "demo"
+      name: "nginx"
 
     container_definitions:
-      conatiner_name: "demo"
-      cluster_arn: "arn:aws:ecs:us-east-1:476498784073:cluster/ecs-ec2"
-      target_group_arn: "arn:aws:elasticloadbalancing:us-east-1:476498784073:targetgroup/demo-ecs-sample/69f3b4a28e134d99"
+      container_name: "nginx"
+      # cluster_arn: "arn:aws:ecs:us-east-1:331851393000:cluster/ecs-ec2"
+      # target_group_arn: "arn:aws:elasticloadbalancing:us-east-1:331851393000:targetgroup/demo-ngnix/7ff049096103eeb3"
       image: "nginx:latest"
-      name: "testl"
+      name: "nginx"
       containerPort: 80
       protocol: "tcp"
 
     load_balancer:
-      container_name: demo
+#      container_name: "demo-1"
       container_port: 80
-      subnet_ids: ["subnet-0dd96741b19ec4c20", "subnet-0882d12e9929ce102"]
+      subnet_ids: ["subnet-01dcaf8e531b9fd7e", "subnet-075d159e662923fd8"]
+
+
+
+
+
+
+
+
+# workspace:
+#   yarra-non-baseline:
+#     aws:   
+#       region: "us-east-1"
+#       account_id: 
+#     account_name: aws-infra
+#     environment_name: "qa"
+
+#     ecs_service:
+#       name: "demo"
+
+#     container_definitions:
+#       container_name: "demo"
+#       cluster_arn: "arn:aws:ecs:us-east-1:476498784073:cluster/ecs-ec2"
+#       target_group_arn: "arn:aws:elasticloadbalancing:us-east-1:476498784073:targetgroup/demo-ecs-sample/69f3b4a28e134d99"
+#       image: "nginx:latest"
+#       name: "testl"
+#       containerPort: 80
+#       protocol: "tcp"
+
+#     load_balancer:
+#       container_name: demo
+#       container_port: 80
+#       subnet_ids: ["subnet-0dd96741b19ec4c20", "subnet-0882d12e9929ce102"]
 
 
 
