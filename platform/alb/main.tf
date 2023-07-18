@@ -91,7 +91,7 @@ module "alb" {
 
   target_groups = [
     {
-      name             = "${local.name}-${local.container_name}"
+      name             = "${local.workspace.project_name}-${local.workspace.environment_name}-default-tg"   #"${local.name}-${local.container_name}"
       backend_protocol = "HTTP"
       backend_port     = local.container_port
       target_type      = "instance"

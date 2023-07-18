@@ -132,6 +132,7 @@ output "cluster_capacity_providers" {
 # }
 
 
-# output "auto_scaling_group_arn" {
-#   value = module.autoscaling.autoscaling_group_arn
-# }
+output "auto_scaling_group_arn" {
+  value = module.autoscaling["ex-1"].autoscaling_group_arn
+}
+

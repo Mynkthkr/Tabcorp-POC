@@ -1,0 +1,38 @@
+common:
+  vpn_cidr: "10.203.0.0/16"
+  vpc_cidr: "192.168.0.0/16"
+
+workspaces:
+  aws-infra-us-east-1-prod:
+    aws:   
+      region: "us-east-1"
+      account_id: 
+    account_name: aws-infra
+    environment_name: "prod"
+    project_name : "ecs-infra"
+
+    ecs_service:
+      name: "httpd"
+      autoscaling:
+        cpu:
+          scale_in_cooldown: 60
+          scale_out_cooldown: 60
+          target_value: 90
+        memory:
+          scale_in_cooldown: 60
+          scale_out_cooldown: 60
+          target_value: 90
+
+    container_definitions:
+      container_name: "httpd"
+      # cluster_arn: "arn:aws:ecs:us-east-1:331851393000:cluster/ecs-ec2"
+      # target_group_arn: "arn:aws:elasticloadbalancing:us-east-1:331851393000:targetgroup/demo-ngnix/7ff049096103eeb3"
+      image: "httpd:latest"
+      name: "httpd"
+      containerPort: 80
+      protocol: "tcp"
+
+    load_balancer:
+#      container_name: demo
+      container_port: 80
+      subnet_ids: ["subnet-01dcaf8e531b9fd7e", "subnet-075d159e662923fd8"]

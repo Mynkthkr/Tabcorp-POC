@@ -10,8 +10,20 @@ module "ecs_service" {
   network_mode = "bridge"
   launch_type = "EC2"
   runtime_platform = "null"
-  cpu    = "256"
-  memory = "256"
+  cpu    = "300"
+  memory = "300"
+  autoscaling_max_capacity = "4"
+  autoscaling_min_capacity = "1"
+  scheduling_strategy = "REPLICA"
+  
+  capacity_provider_strategy = {
+    # On-demand instances
+    "ex-1-${local.workspace.project_name}-${local.workspace.environment_name}" = {
+      capacity_provider = "ex-1-${local.workspace.project_name}-${local.workspace.environment_name}"  #module.ecs_cluster.autoscaling_capacity_providers["ex-1"].name
+      weight            = 1
+      base              = 1
+    }
+  }
 
   # Container definition(s)
   container_definitions = {
@@ -21,8 +33,8 @@ module "ecs_service" {
     #   name  = "hello"
     #   value = "world"
     # }
-      cpu       = "256"
-      memory    = "256"
+      cpu       = "300"
+      memory    = "300"
       essential = true
       image     = local.workspace.container_definitions.image 
       port_mappings = [
@@ -47,6 +59,33 @@ module "ecs_service" {
       container_port   = local.workspace.load_balancer.container_port
     }
   }
+
+  autoscaling_policies = {
+    cpu = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        disable_scale_in   = false
+        scale_in_cooldown  = "${local.workspace.ecs_service.autoscaling.cpu.scale_in_cooldown}"
+        scale_out_cooldown = "${local.workspace.ecs_service.autoscaling.cpu.scale_out_cooldown}"
+        target_value       = "${local.workspace.ecs_service.autoscaling.cpu.target_value}"  
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageCPUUtilization"
+        }
+      }
+    },
+    memory = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        disable_scale_in   = false
+        scale_in_cooldown  = "${local.workspace.ecs_service.autoscaling.memory.scale_in_cooldown}"
+        scale_out_cooldown = "${local.workspace.ecs_service.autoscaling.memory.scale_out_cooldown}"
+        target_value       = "${local.workspace.ecs_service.autoscaling.memory.target_value}"  
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageMemoryUtilization"
+        }
+      }
+    }
+  }
   
   subnet_ids =  local.workspace.load_balancer.subnet_ids
   security_group_rules = {
@@ -66,12 +105,12 @@ module "ecs_service" {
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
-
-  tags = {
-    Project = "${local.workspace.project_name}-${local.workspace.environment_name}"
-    Environment = "${local.workspace.environment_name}"
-    Terraform   = "true"
-  }
+  tags = local.tags
+  # tags = {
+  #   Project = "${local.workspace.project_name}-${local.workspace.environment_name}"
+  #   Environment = "${local.workspace.environment_name}"
+  #   Terraform   = "true"
+  # }
 }
 
 resource "aws_lb_target_group" "this" {

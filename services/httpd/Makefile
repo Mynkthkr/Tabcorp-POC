@@ -1,5 +1,5 @@
-TERRAFORM_IMAGE=ttnd/terraform:custom-mongo
-TERRAFORM_CUSTOM=ttnd/terraform:kubectl-custom
+TERRAFORM_IMAGE=abhaybahadauria/terraform:custom-mongo
+TERRAFORM_CUSTOM=abhaybahadauria/terraform:kubectl-custom
 RUN_TERRAFORM  =sudo docker run -i --rm -v $(PWD):/work  $(TERRAFORM_IMAGE)
 
 

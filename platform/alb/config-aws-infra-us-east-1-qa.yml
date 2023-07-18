@@ -1,0 +1,14 @@
+common:
+
+
+workspaces:
+  aws-infra-us-east-1-qa:
+    aws:   
+      region: "us-east-1"
+      account_id: 
+    account_name: aws-infra
+    environment_name: "qa"
+    project_name : "ecs-infra"
+
+    extra:
+      subnet_ids: ["subnet-01dcaf8e531b9fd7e", "subnet-075d159e662923fd8"]

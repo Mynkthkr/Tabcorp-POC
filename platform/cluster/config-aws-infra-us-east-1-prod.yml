@@ -1,0 +1,24 @@
+common:
+  vpn_cidr: "10.203.0.0/16"
+  vpc_cidr: "192.168.0.0/16"
+
+workspaces:
+  aws-infra-us-east-1-prod:
+   aws:   
+     region: "us-east-1"
+     account_id: 
+   account_name: aws-infra
+   environment_name: "prod"
+   project_name : "ecs-infra"
+
+   autoscaling_capacity_providers:
+     name: "asgtest"
+     weight: 60
+     base: 20
+   # ecs_service:
+   #   name: "demo"
+   autoscaling:
+     instance_type: "t2.micro"
+     image_id:  "ami-0e1ce54e679f83a66"
+   extra:
+     subnet_ids: ["subnet-01dcaf8e531b9fd7e", "subnet-075d159e662923fd8"]

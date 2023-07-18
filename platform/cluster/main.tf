@@ -4,6 +4,7 @@
 
 module "ecs_cluster" {
   source = "terraform-aws-modules/ecs/aws//modules/cluster"
+  version = "~> 5.2.0"
 
   cluster_name = "${local.workspace.project_name}-${local.workspace.environment_name}"     #"ecs-ec2"
 
@@ -24,6 +25,26 @@ module "ecs_cluster" {
   #   Terraform   = "true"
   # }
   tags = local.tags
+  
+  autoscaling_capacity_providers = {
+    # On-demand instances
+    "ex-1-${local.workspace.project_name}-${local.workspace.environment_name}" = {
+      auto_scaling_group_arn         = "${data.aws_autoscaling_groups.this.arns[0]}"   #"${module.autoscaling[ex-1].autoscaling_group_arn}"  #values(module.autoscaling[each.ex-1].autoscaling_group_arn)   #module.autoscaling["ex-1"].autoscaling_group_arn     #module.autoscaling["ex-1"].autoscaling_group_arn
+      managed_termination_protection = "ENABLED"
+
+      managed_scaling = {
+        maximum_scaling_step_size = 5
+        minimum_scaling_step_size = 1
+        status                    = "ENABLED"
+        target_capacity           = 90
+      }
+
+      default_capacity_provider_strategy = {
+        weight = 80
+        base   = 80
+      }
+    }
+  }
 }
 
 
@@ -35,9 +56,9 @@ locals {
 
 
 module "autoscaling" {
-    depends_on = [
-    module.ecs_cluster
-  ]
+  #   depends_on = [
+  #   module.ecs_cluster
+  # ]
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 6.5"
 
@@ -86,7 +107,7 @@ module "autoscaling" {
   vpc_zone_identifier =  local.workspace.extra.subnet_ids         #module.vpc.private_subnets
   health_check_type   = "EC2"
   min_size            = "1"
-  max_size            = "1"
+  max_size            = "3"
   desired_capacity    = "1"
 
   # https://github.com/hashicorp/terraform-provider-aws/issues/12582
